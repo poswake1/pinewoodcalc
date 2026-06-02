@@ -157,7 +157,7 @@
     <header>
         <div class="logo">PBCC Tools</div>
         <ul class="nav-links">
-            <li><a href="#">Calculator</a></li>
+            <li><a href="#">Converter</a></li>
             <li><a href="#">Database</a></li>
             <li><a href="#">System Status</a></li>
         </ul>
@@ -165,60 +165,66 @@
 
     <!-- Content Workspace -->
     <main>
-        <h1 class="hero-title">We power tactical grid intelligence <br> across the Computer Core.</h1>
-        <p class="hero-subtitle">Convert shifts accurately, calculate goals, and maintain maximum facility productivity.</p>
+        <!-- Updated Motto -->
+        <h1 class="hero-title">PB Time to Credits Converter</h1>
+        <!-- Updated Subheading -->
+        <p class="hero-subtitle">This was verified using 1 hour of neutral gameplay as seen below. This was developed by poswake1</p>
 
         <!-- Reversible Core Calculator Component -->
         <div class="calculator-container">
-            <h2>Shift Conversion Terminal</h2>
-            <div class="rate-badge">Active Duty Rate: 1 Hr = 17 Credits</div>
+            <!-- Updated Terminal Title -->
+            <h2>Converter</h2>
+            <div class="rate-badge">Active Duty Rate: 60 Mins = 17 Credits</div>
             
+            <!-- Updated to Minutes Input -->
             <div class="input-group">
-                <label for="hours-input">In-Game Session Duration (Hours)</label>
-                <input type="number" id="hours-input" class="input-field" placeholder="0" oninput="syncHoursToCredits()">
+                <label for="minutes-input">In-Game Session Duration (Minutes)</label>
+                <input type="number" id="minutes-input" class="input-field" placeholder="0" oninput="syncMinutesToCredits()">
             </div>
             
             <div class="input-group" style="margin-bottom: 10px;">
                 <label for="credits-input">Projected Yield Balance (Credits)</label>
-                <input type="number" id="credits-input" class="input-field" placeholder="0" oninput="syncCreditsToHours()">
+                <input type="number" id="credits-input" class="input-field" placeholder="0" oninput="syncCreditsToMinutes()">
             </div>
         </div>
 
-        <!-- Media Placement Section -->
+        <!-- Media Placement Section (With your custom iframe) -->
         <div class="video-container">
-            <!-- REPLACE THE LINK BELOW WITH YOUR EMBED LINK FROM YOUTUBE -->
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="PBCC Operations Video" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/o3FmWFv97Nk?si=fdFJIN6sl0gUWL7a" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
     </main>
 
     <!-- Interactive Execution Logic -->
     <script>
-        const VALUE_PER_HOUR = 17;
+        // 17 credits / 60 minutes = credits per minute
+        const CREDITS_PER_MINUTE = 17 / 60;
 
-        function syncHoursToCredits() {
-            const hoursElement = document.getElementById('hours-input');
+        function syncMinutesToCredits() {
+            const minutesElement = document.getElementById('minutes-input');
             const creditsElement = document.getElementById('credits-input');
             
-            if (!hoursElement.value) {
+            if (!minutesElement.value) {
                 creditsElement.value = '';
                 return;
             }
             
-            let generatedCredits = parseFloat(hoursElement.value) * VALUE_PER_HOUR;
-            creditsElement.value = Math.round(generatedCredits * 10) / 10; // Rounds up to 1 decimal place
+            let generatedCredits = parseFloat(minutesElement.value) * CREDITS_PER_MINUTE;
+            // Rounds to 1 decimal place for easy readability
+            creditsElement.value = Math.round(generatedCredits * 10) / 10;
         }
 
-        function syncCreditsToHours() {
-            const hoursElement = document.getElementById('hours-input');
+        function syncCreditsToMinutes() {
+            const minutesElement = document.getElementById('minutes-input');
             const creditsElement = document.getElementById('credits-input');
             
             if (!creditsElement.value) {
-                hoursElement.value = '';
+                minutesElement.value = '';
                 return;
             }
             
-            let requiredHours = parseFloat(creditsElement.value) / VALUE_PER_HOUR;
-            hoursElement.value = Math.round(requiredHours * 100) / 100; // Rounds up to 2 decimal places
+            let requiredMinutes = parseFloat(creditsElement.value) / CREDITS_PER_MINUTE;
+            // Rounds to nearest whole minute since users usually track whole numbers of minutes
+            minutesElement.value = Math.round(requiredMinutes);
         }
     </script>
 </body>
