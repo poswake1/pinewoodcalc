@@ -117,6 +117,20 @@
             margin-bottom: 8px;
             color: rgba(255, 255, 255, 0.6);
         }
+        
+        /* Flex wrapper to keep the title and the hour readout inline */
+        .label-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .hour-readout {
+            font-size: 0.8rem;
+            color: rgba(0, 255, 102, 0.8);
+            font-family: monospace;
+            font-weight: 600;
+        }
+
         .input-field {
             width: 100%;
             padding: 14px;
@@ -314,7 +328,6 @@
             <h2>Converter</h2>
             <div class="rate-badge">Conversion Rate (Est.): 60 Mins = 17 Credits</div>
             
-            <!-- UPDATED: Text removed "(In Bank)" -->
             <div class="input-group">
                 <label for="starting-credits">Current Credits</label>
                 <input type="number" id="starting-credits" class="input-field" placeholder="0" oninput="recalculateTotalsFromBank()">
@@ -322,8 +335,12 @@
             
             <hr class="section-divider">
             
+            <!-- UPDATED: Flex-aligned header section for dynamic live hour translation display -->
             <div class="input-group">
-                <label for="minutes-input">Session Minutes</label>
+                <div class="label-wrapper">
+                    <label for="minutes-input">Session Minutes</label>
+                    <span id="hours-display" class="hour-readout"></span>
+                </div>
                 <input type="number" id="minutes-input" class="input-field" placeholder="0" oninput="syncMinutesToCredits()">
             </div>
             
@@ -410,7 +427,6 @@
             </div>
 
             <!-- Hyper Speed Coil -->
-            <!-- UPDATED: Color changed to Yellowish Orange (#ffb044) -->
             <div class="item-card" data-cost="150">
                 <div class="item-icon-wrapper" style="color: #ffb044;">
                     <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-4 4v12a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2v2h-4V6a2 2 0 0 1 2-2zm2 14a2 2 0 0 1-4 0v-2h4v2zm-4-6h4v2h-4v-2z"/></svg>
@@ -537,6 +553,19 @@
             return sessionInput.value ? parseFloat(sessionInput.value) : 0;
         }
 
+        /* NEW: Utility helper to calculate and display the hours string next to minutes label */
+        function updateHoursDisplay(minutes) {
+            const display = document.getElementById('hours-display');
+            if (!minutes || minutes <= 0) {
+                display.innerText = '';
+                return;
+            }
+            let rawHours = minutes / 60;
+            // Round it nicely to 1 decimal place (e.g., 2.5 hrs)
+            let formattedHours = Math.round(rawHours * 10) / 10;
+            display.innerText = `(${formattedHours} hrs)`;
+        }
+
         function updateProjectedTotal(sessionCredits) {
             const totalElement = document.getElementById('total-credits');
             const bankCredits = getBankCredits();
@@ -559,11 +588,15 @@
             
             if (!minutesElement.value) {
                 creditsElement.value = '';
+                updateHoursDisplay(0);
                 updateProjectedTotal(0);
                 return;
             }
             
-            let generatedCredits = parseFloat(minutesElement.value) * CREDITS_PER_MINUTE;
+            let minutesVal = parseFloat(minutesElement.value);
+            updateHoursDisplay(minutesVal);
+
+            let generatedCredits = minutesVal * CREDITS_PER_MINUTE;
             let finalCredits = Math.round(generatedCredits * 10) / 10;
             creditsElement.value = finalCredits;
             
@@ -576,44 +609,42 @@
             
             if (!creditsElement.value) {
                 minutesElement.value = '';
+                updateHoursDisplay(0);
                 updateProjectedTotal(0);
                 return;
             }
             
             let targetCredits = parseFloat(creditsElement.value);
-            let requiredMinutes = targetCredits / CREDITS_PER_MINUTE;
-            minutesElement.value = Math.round(requiredMinutes);
+            let requiredMinutes = Math.round(targetCredits / CREDITS_PER_MINUTE);
+            minutesElement.value = requiredMinutes;
             
+            updateHoursDisplay(requiredMinutes);
             updateProjectedTotal(targetCredits);
         }
 
-        /* NEW: Reverse-engineering autofill function */
         function calculateTargetTime(itemCost) {
             const bankCredits = getBankCredits();
             const minutesElement = document.getElementById('minutes-input');
             const creditsElement = document.getElementById('credits-input');
 
-            // If user already has enough credits, no extra grind session is needed
             if (bankCredits >= itemCost) {
                 minutesElement.value = 0;
                 creditsElement.value = 0;
+                updateHoursDisplay(0);
                 updateProjectedTotal(0);
                 return;
             }
 
-            // Calculate exact credit difference needed
             let creditsNeeded = itemCost - bankCredits;
             let finalSessionCredits = Math.round(creditsNeeded * 10) / 10;
             creditsElement.value = finalSessionCredits;
 
-            // Translate the credit difference into minutes
-            let requiredMinutes = finalSessionCredits / CREDITS_PER_MINUTE;
-            minutesElement.value = Math.round(requiredMinutes);
+            let requiredMinutes = Math.round(finalSessionCredits / CREDITS_PER_MINUTE);
+            minutesElement.value = requiredMinutes;
 
-            // Commit the projection update
+            updateHoursDisplay(requiredMinutes);
             updateProjectedTotal(finalSessionCredits);
             
-            // Instantly scroll back to the calculator panel smoothly so they see the result
             document.querySelector('.calculator-container').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -629,7 +660,6 @@
             });
         }
         
-        // Initialize logic status on payload drop
         evaluateUnlocks(0);
     </script>
 </body>
