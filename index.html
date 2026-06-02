@@ -175,6 +175,7 @@
             justify-content: space-between;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            min-height: 280px;
         }
         
         /* Rounded Green Square outline when unlocked */
@@ -185,9 +186,9 @@
         }
 
         .item-icon-wrapper {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 15px;
+            width: 70px;
+            height: 70px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -205,18 +206,19 @@
             stroke-linejoin: round;
         }
         .item-name {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             margin-bottom: 6px;
         }
         .item-cost {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-family: monospace;
             color: rgba(255, 255, 255, 0.6);
             background: rgba(0, 0, 0, 0.3);
             padding: 2px 10px;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            display: inline-block;
         }
         .item-card.unlocked .item-cost {
             color: #00ff66;
@@ -228,7 +230,7 @@
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 1px;
-            margin-top: 10px;
+            margin-top: 6px;
             color: transparent;
             user-select: none;
         }
@@ -236,12 +238,39 @@
             color: #00ff66;
         }
 
+        /* Target autofill utility button */
+        .calc-target-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #ffffff;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+        }
+        .calc-target-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        .item-card.unlocked .calc-target-btn {
+            border-color: rgba(0, 255, 102, 0.3);
+            background: rgba(0, 255, 102, 0.05);
+            color: #00ff66;
+        }
+        .item-card.unlocked .calc-target-btn:hover {
+            background: rgba(0, 255, 102, 0.15);
+        }
+
         /* Disclaimer Styling */
         .disclaimer {
             font-size: 0.75rem;
             color: #ff4a4a;
             font-weight: bold;
-            margin-top: 6px;
+            margin-top: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -283,11 +312,11 @@
         <!-- Reversible Core Calculator Component -->
         <div class="calculator-container">
             <h2>Converter</h2>
-            <!-- UPDATED: Text renamed to "Conversion Rate (Est.)" -->
             <div class="rate-badge">Conversion Rate (Est.): 60 Mins = 17 Credits</div>
             
+            <!-- UPDATED: Text removed "(In Bank)" -->
             <div class="input-group">
-                <label for="starting-credits">Current Credits (In Bank)</label>
+                <label for="starting-credits">Current Credits</label>
                 <input type="number" id="starting-credits" class="input-field" placeholder="0" oninput="recalculateTotalsFromBank()">
             </div>
             
@@ -322,9 +351,10 @@
                 </div>
                 <div>
                     <div class="item-name">Partial Core Status Tablet</div>
-                    <span class="item-cost">0 Cr (Group Member)</span>
+                    <span class="item-cost">0 Cr (Group)</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(0)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Member Coil -->
@@ -334,9 +364,10 @@
                 </div>
                 <div>
                     <div class="item-name">Member Coil</div>
-                    <span class="item-cost">0 Cr (Group Member)</span>
+                    <span class="item-cost">0 Cr (Group)</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(0)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Roleplay Clipboard -->
@@ -349,6 +380,7 @@
                     <span class="item-cost">5 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(5)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Gravity Coil -->
@@ -361,6 +393,7 @@
                     <span class="item-cost">10 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(10)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Stone Coil -->
@@ -373,11 +406,13 @@
                     <span class="item-cost">80 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(80)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Hyper Speed Coil -->
+            <!-- UPDATED: Color changed to Yellowish Orange (#ffb044) -->
             <div class="item-card" data-cost="150">
-                <div class="item-icon-wrapper" style="color: #ff5c5c;">
+                <div class="item-icon-wrapper" style="color: #ffb044;">
                     <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-4 4v12a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2v2h-4V6a2 2 0 0 1 2-2zm2 14a2 2 0 0 1-4 0v-2h4v2zm-4-6h4v2h-4v-2z"/></svg>
                 </div>
                 <div>
@@ -385,6 +420,7 @@
                     <span class="item-cost">150 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(150)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Credit Pistol -->
@@ -397,6 +433,7 @@
                     <span class="item-cost">250 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(250)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Crowbar -->
@@ -409,6 +446,7 @@
                     <span class="item-cost">350 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(350)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Credit Rifle -->
@@ -421,6 +459,7 @@
                     <span class="item-cost">750 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(750)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Boss Rocket Launcher -->
@@ -433,6 +472,7 @@
                     <span class="item-cost">1250 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(1250)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Fire Starter Stick -->
@@ -445,6 +485,7 @@
                     <span class="item-cost">1500 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(1500)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Credit SMG -->
@@ -458,6 +499,7 @@
                     <div class="disclaimer">Not In-Game Anymore</div>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(2000)">🎯 Calculate Missing</button>
             </div>
 
             <!-- Flamethrower -->
@@ -470,6 +512,7 @@
                     <span class="item-cost">2500 Cr</span>
                 </div>
                 <div class="unlocked-status">Unlocked</div>
+                <button class="calc-target-btn" onclick="calculateTargetTime(2500)">🎯 Calculate Missing</button>
             </div>
 
         </div>
@@ -542,6 +585,36 @@
             minutesElement.value = Math.round(requiredMinutes);
             
             updateProjectedTotal(targetCredits);
+        }
+
+        /* NEW: Reverse-engineering autofill function */
+        function calculateTargetTime(itemCost) {
+            const bankCredits = getBankCredits();
+            const minutesElement = document.getElementById('minutes-input');
+            const creditsElement = document.getElementById('credits-input');
+
+            // If user already has enough credits, no extra grind session is needed
+            if (bankCredits >= itemCost) {
+                minutesElement.value = 0;
+                creditsElement.value = 0;
+                updateProjectedTotal(0);
+                return;
+            }
+
+            // Calculate exact credit difference needed
+            let creditsNeeded = itemCost - bankCredits;
+            let finalSessionCredits = Math.round(creditsNeeded * 10) / 10;
+            creditsElement.value = finalSessionCredits;
+
+            // Translate the credit difference into minutes
+            let requiredMinutes = finalSessionCredits / CREDITS_PER_MINUTE;
+            minutesElement.value = Math.round(requiredMinutes);
+
+            // Commit the projection update
+            updateProjectedTotal(finalSessionCredits);
+            
+            // Instantly scroll back to the calculator panel smoothly so they see the result
+            document.querySelector('.calculator-container').scrollIntoView({ behavior: 'smooth' });
         }
 
         function evaluateUnlocks(currentTotalCredits) {
