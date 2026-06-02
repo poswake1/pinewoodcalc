@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinewood Computer Core Terminal - V2.2</title>
+    <title>Pinewood Computer Core Terminal</title>
     <style>
         /* Modern Reset & Font Configuration */
         * {
@@ -131,6 +131,22 @@
             outline: none;
             border-color: rgba(255, 255, 255, 0.6);
             background: rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Specific styling for the read-only projection field */
+        .input-field.readonly-total {
+            background: rgba(0, 255, 102, 0.05);
+            border-color: rgba(0, 255, 102, 0.3);
+            color: #00ff66;
+            font-weight: bold;
+        }
+        
+        /* Subtle divider line to separate sections visually */
+        .section-divider {
+            border: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            margin: 25px 0;
         }
 
         /* Credit Shop Manifest Section */
@@ -267,16 +283,31 @@
         <!-- Reversible Core Calculator Component -->
         <div class="calculator-container">
             <h2>Converter</h2>
-            <div class="rate-badge">Active Duty Rate: 60 Mins = 17 Credits</div>
+            <!-- UPDATED: Text renamed to "Conversion Rate (Est.)" -->
+            <div class="rate-badge">Conversion Rate (Est.): 60 Mins = 17 Credits</div>
             
             <div class="input-group">
-                <label for="minutes-input">Minutes</label>
+                <label for="starting-credits">Current Credits (In Bank)</label>
+                <input type="number" id="starting-credits" class="input-field" placeholder="0" oninput="recalculateTotalsFromBank()">
+            </div>
+            
+            <hr class="section-divider">
+            
+            <div class="input-group">
+                <label for="minutes-input">Session Minutes</label>
                 <input type="number" id="minutes-input" class="input-field" placeholder="0" oninput="syncMinutesToCredits()">
             </div>
             
-            <div class="input-group" style="margin-bottom: 10px;">
-                <label for="credits-input">Credits</label>
+            <div class="input-group">
+                <label for="credits-input">Session Credits Earned</label>
                 <input type="number" id="credits-input" class="input-field" placeholder="0" oninput="syncCreditsToMinutes()">
+            </div>
+            
+            <hr class="section-divider">
+
+            <div class="input-group" style="margin-bottom: 10px;">
+                <label for="total-credits">Total Projected Credits</label>
+                <input type="number" id="total-credits" class="input-field readonly-total" placeholder="0" readonly>
             </div>
         </div>
 
@@ -453,13 +484,39 @@
     <script>
         const CREDITS_PER_MINUTE = 17 / 60;
 
+        function getBankCredits() {
+            const bankInput = document.getElementById('starting-credits');
+            return bankInput.value ? parseFloat(bankInput.value) : 0;
+        }
+
+        function getSessionCredits() {
+            const sessionInput = document.getElementById('credits-input');
+            return sessionInput.value ? parseFloat(sessionInput.value) : 0;
+        }
+
+        function updateProjectedTotal(sessionCredits) {
+            const totalElement = document.getElementById('total-credits');
+            const bankCredits = getBankCredits();
+            
+            let combinedTotal = bankCredits + sessionCredits;
+            let finalDisplayTotal = Math.round(combinedTotal * 10) / 10;
+            
+            totalElement.value = finalDisplayTotal;
+            evaluateUnlocks(finalDisplayTotal);
+        }
+
+        function recalculateTotalsFromBank() {
+            const sessionCredits = getSessionCredits();
+            updateProjectedTotal(sessionCredits);
+        }
+
         function syncMinutesToCredits() {
             const minutesElement = document.getElementById('minutes-input');
             const creditsElement = document.getElementById('credits-input');
             
             if (!minutesElement.value) {
                 creditsElement.value = '';
-                evaluateUnlocks(0);
+                updateProjectedTotal(0);
                 return;
             }
             
@@ -467,7 +524,7 @@
             let finalCredits = Math.round(generatedCredits * 10) / 10;
             creditsElement.value = finalCredits;
             
-            evaluateUnlocks(finalCredits);
+            updateProjectedTotal(finalCredits);
         }
 
         function syncCreditsToMinutes() {
@@ -476,7 +533,7 @@
             
             if (!creditsElement.value) {
                 minutesElement.value = '';
-                evaluateUnlocks(0);
+                updateProjectedTotal(0);
                 return;
             }
             
@@ -484,14 +541,14 @@
             let requiredMinutes = targetCredits / CREDITS_PER_MINUTE;
             minutesElement.value = Math.round(requiredMinutes);
             
-            evaluateUnlocks(targetCredits);
+            updateProjectedTotal(targetCredits);
         }
 
-        function evaluateUnlocks(currentCredits) {
+        function evaluateUnlocks(currentTotalCredits) {
             const cards = document.querySelectorAll('.item-card');
             cards.forEach(card => {
                 const activationCost = parseFloat(card.getAttribute('data-cost'));
-                if (currentCredits >= activationCost) {
+                if (currentTotalCredits >= activationCost) {
                     card.classList.add('unlocked');
                 } else {
                     card.classList.remove('unlocked');
@@ -499,7 +556,7 @@
             });
         }
         
-        // Initialize unlocks on load
+        // Initialize logic status on payload drop
         evaluateUnlocks(0);
     </script>
 </body>
