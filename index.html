@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinewood Computer Core Terminal</title>
+    <style>
+        /* Modern Reset & Font Configuration */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            /* Recreating the fluid blue-purple gradient from image_2b9da4.png */
+            background: linear-gradient(135deg, #0e5c9e 0%, #1c266a 40%, #5c1b63 100%);
+            background-attachment: fixed;
+        }
+
+        /* Navigation Header Alignment */
+        header {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        /* Main Body Layout container */
+        main {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        /* Centered Hero Message Setup */
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            letter-spacing: -0.5px;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+
+        /* Interactive Reversible Calculator Widget */
+        .calculator-container {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            margin: 0 auto 50px auto;
+        }
+        .calculator-container h2 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .rate-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Media Player Wrapper */
+        .video-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            aspect-ratio: 16 / 9;
+        }
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation Grid -->
+    <header>
+        <div class="logo">PBCC Tools</div>
+        <ul class="nav-links">
+            <li><a href="#">Calculator</a></li>
+            <li><a href="#">Database</a></li>
+            <li><a href="#">System Status</a></li>
+        </ul>
+    </header>
+
+    <!-- Content Workspace -->
+    <main>
+        <h1 class="hero-title">We power tactical grid intelligence <br> across the Computer Core.</h1>
+        <p class="hero-subtitle">Convert shifts accurately, calculate goals, and maintain maximum facility productivity.</p>
+
+        <!-- Reversible Core Calculator Component -->
+        <div class="calculator-container">
+            <h2>Shift Conversion Terminal</h2>
+            <div class="rate-badge">Active Duty Rate: 1 Hr = 17 Credits</div>
+            
+            <div class="input-group">
+                <label for="hours-input">In-Game Session Duration (Hours)</label>
+                <input type="number" id="hours-input" class="input-field" placeholder="0" oninput="syncHoursToCredits()">
+            </div>
+            
+            <div class="input-group" style="margin-bottom: 10px;">
+                <label for="credits-input">Projected Yield Balance (Credits)</label>
+                <input type="number" id="credits-input" class="input-field" placeholder="0" oninput="syncCreditsToHours()">
+            </div>
+        </div>
+
+        <!-- Media Placement Section -->
+        <div class="video-container">
+            <!-- REPLACE THE LINK BELOW WITH YOUR EMBED LINK FROM YOUTUBE -->
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="PBCC Operations Video" allowfullscreen></iframe>
+        </div>
+    </main>
+
+    <!-- Interactive Execution Logic -->
+    <script>
+        const VALUE_PER_HOUR = 17;
+
+        function syncHoursToCredits() {
+            const hoursElement = document.getElementById('hours-input');
+            const creditsElement = document.getElementById('credits-input');
+            
+            if (!hoursElement.value) {
+                creditsElement.value = '';
+                return;
+            }
+            
+            let generatedCredits = parseFloat(hoursElement.value) * VALUE_PER_HOUR;
+            creditsElement.value = Math.round(generatedCredits * 10) / 10; // Rounds up to 1 decimal place
+        }
+
+        function syncCreditsToHours() {
+            const hoursElement = document.getElementById('hours-input');
+            const creditsElement = document.getElementById('credits-input');
+            
+            if (!creditsElement.value) {
+                hoursElement.value = '';
+                return;
+            }
+            
+            let requiredHours = parseFloat(creditsElement.value) / VALUE_PER_HOUR;
+            hoursElement.value = Math.round(requiredHours * 100) / 100; // Rounds up to 2 decimal places
+        }
+    </script>
+</body>
+</html>
