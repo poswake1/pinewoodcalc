@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reactor Monitor | PBCC Tools</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f1b; color: #fff; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 16px; width: 100%; max-width: 600px; text-align: center; }
+        
+        /* Updated Progress Bar */
+        .progress-container { width: 100%; height: 30px; background: #222; border-radius: 15px; margin: 20px 0; overflow: hidden; border: 1px solid #444; position: relative; }
+        #temp-bar { width: 50%; height: 100%; background: linear-gradient(90deg, #3498db, #2ecc71, #e74c3c); transition: width 0.5s ease; position: absolute; left: 0; }
+        
+        /* Controls */
+        .controls { display: grid; gap: 15px; margin-top: 20px; }
+        .control-group { display: flex; flex-direction: column; gap: 8px; }
+        .btn-group { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
+        button { padding: 8px 12px; border-radius: 6px; border: none; background: #333; color: white; cursor: pointer; }
+        button.active { background: #e67e22; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Reactor Monitor</h1>
+        <div class="progress-container"><div id="temp-bar"></div></div>
+        <h2 id="temp-display">0°C</h2>
+
+        <div class="controls">
+            <!-- Power -->
+            <div class="control-group">
+                <label>Reactor Power</label>
+                <div class="btn-group" id="power-btns">
+                    <button onclick="update('power', 1)">1</button>
+                    <button onclick="update('power', 2)">2</button>
+                    <button onclick="update('power', 3)">3</button>
+                    <button onclick="update('power', 4)">4</button>
+                </div>
+            </div>
+            <!-- Coolant -->
+            <div class="control-group">
+                <label>Coolant</label>
+                <div class="btn-group">
+                    <button onclick="update('coolant', true)">Enabled</button>
+                    <button onclick="update('coolant', false)">Disabled</button>
+                </div>
+            </div>
+            <!-- Placeholder for future Fans/Lasers -->
+            <p><small>Temp changes every 8 seconds</small></p>
+        </div>
+    </div>
+
+    <script>
+        let state = { power: 1, coolant: false };
+        let temp = 0;
+
+        function update(key, val) {
+            state[key] = val;
+            calculate();
+        }
+
+        function calculate() {
+            // Logic: Power adds heat, Coolant removes heat
+            let heatGain = (state.power * 10);
+            let heatLoss = (state.coolant ? 20 : 0);
+            temp += (heatGain - heatLoss);
+
+            // Bounds
+            if(temp < -4000) temp = -4000;
+            if(temp > 4000) temp = 4000;
+            
+            // Map -4000 to 4000 into 0% to 100%
+            let percentage = ((temp + 4000) / 8000) * 100;
+            
+            document.getElementById('temp-bar').style.width = percentage + '%';
+            document.getElementById('temp-display').innerText = temp + '°C';
+        }
+    </script>
+</body>
+</html>
