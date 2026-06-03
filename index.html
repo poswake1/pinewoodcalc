@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBCC Tools Hub</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #0f0f1b; 
+            color: #fff; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px 40px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid #333;
+            margin-bottom: 60px;
+        }
+
+        .hub-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 900px;
+        }
+
+        .tool-card {
+            background: #1a1a2e;
+            padding: 40px 20px;
+            border: 1px solid #333;
+            border-radius: 16px;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            border-color: #007bff;
+            background: #252545;
+            transform: translateY(-5px);
+        }
+
+        .tool-card h2 { margin-bottom: 10px; }
+        .tool-card p { color: #aaa; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>PBCC Master Terminal</h1>
+        <br>
+        <p>Developed by poswake1</p>
+    </header>
+
+    <div class="hub-container">
+        <a href="/conversion/" class="tool-card">
+            <h2>Converter</h2>
+            <p>Calculate your credits over time.</p>
+        </a>
+        <a href="/calculator/" class="tool-card">
+            <h2>Reactor Monitor</h2>
+            <p>Track temperature and cooling.</p>
+        </a>
+        <a href="/weapons/" class="tool-card">
+            <h2>Weapons DB</h2>
+            <p>Access the full weapons manifest.</p>
+        </a>
+    </div>
+
+</body>
+</html>
