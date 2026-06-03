@@ -31,11 +31,28 @@
             background: rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(5px);
         }
-        .logo { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-links { display: flex; gap: 20px; list-style: none; }
-        .nav-links a { color: #aaa; text-decoration: none; font-size: 0.8rem; text-transform: uppercase; }
-        .nav-links a:hover { color: #fff; }
-
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #ffffff;
+        }
         /* Main Content */
         .content-wrapper {
             flex-grow: 1;
