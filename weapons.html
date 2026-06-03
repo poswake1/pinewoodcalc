@@ -205,9 +205,7 @@
     <header>
         <div class="logo">PBCC Tools</div>
         <ul class="nav-links">
-            <li><a href="#">Converter</a></li>
-            <li><a href="#">Database</a></li>
-            <li><a href="#">System Status</a></li>
+            <li><a href="https://poswake1.github.io/pinewoodcalc/">Converter</a></li>
         </ul>
     </header>
 
@@ -451,7 +449,6 @@
                 const tableRows = section.querySelectorAll('tbody tr');
                 let sectionHasVisibleRows = false;
 
-                // Evaluate filter match first
                 const factionMatches = (factionFilter === 'all' || factionFilter === factionType);
 
                 tableRows.forEach(row => {
@@ -466,7 +463,6 @@
                     }
                 });
 
-                // Display or hide whole block based on containing child rows
                 if (sectionHasVisibleRows) {
                     section.style.display = '';
                 } else {
