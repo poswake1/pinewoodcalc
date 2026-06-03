@@ -201,20 +201,17 @@
 </head>
 <body>
 
-    <!-- Header Navigation Grid -->
     <header>
         <div class="logo">PBCC Tools</div>
         <ul class="nav-links">
-            <li><a href="https://poswake1.github.io/pinewoodcalc/">Converter</a></li>
+            <li><a href="https://poswake1.github.io/pinewoodcalc/">Conversion Tool</a></li>
         </ul>
     </header>
 
-    <!-- Content Workspace -->
     <main>
         <h1 class="hero-title">Terminal Weapons Database</h1>
         <p class="hero-subtitle">Comprehensive performance metrics, damage analysis, and tier classifications across all security configurations.</p>
 
-        <!-- Search and Global Filter Tools -->
         <div class="controls-container">
             <input type="text" id="db-search" class="search-field" placeholder="Search weapon profiles by name..." oninput="filterDatabase()">
             <select id="faction-filter" class="filter-select" onchange="filterDatabase()">
@@ -227,7 +224,6 @@
             </select>
         </div>
 
-        <!-- 1. CREDIT WEAPONS MANIFEST -->
         <section class="faction-section" data-faction="credit">
             <h2 class="faction-heading" style="color: #d19a66;">🛠️ Credit Weapons</h2>
             <div class="table-responsive">
@@ -271,7 +267,6 @@
             </div>
         </section>
 
-        <!-- 2. OP WEAPONS MANIFEST -->
         <section class="faction-section" data-faction="op">
             <h2 class="faction-heading" style="color: #e5c07b;">👑 OP Weapons</h2>
             <div class="table-responsive">
@@ -312,7 +307,6 @@
             </div>
         </section>
 
-        <!-- 3. PBST WEAPONS MANIFEST -->
         <section class="faction-section" data-faction="pbst">
             <h2 class="faction-heading" style="color: #61afef;">🛡️ PBST (Security) Weapons</h2>
             <div class="table-responsive">
@@ -353,7 +347,6 @@
             </div>
         </section>
 
-        <!-- 4. TMS WEAPONS MANIFEST -->
         <section class="faction-section" data-faction="tms">
             <h2 class="faction-heading" style="color: #e06c75;">⚔️ TMS Weapons</h2>
             <div class="table-responsive">
@@ -394,7 +387,6 @@
             </div>
         </section>
 
-        <!-- 5. PIA WEAPONS MANIFEST -->
         <section class="faction-section" data-faction="pia">
             <h2 class="faction-heading" style="color: #98c379;">💻 PIA (Moderation) Weapons</h2>
             <div class="table-responsive">
@@ -437,7 +429,6 @@
 
     </main>
 
-    <!-- Search/Filter Operational Script -->
     <script>
         function filterDatabase() {
             const searchQuery = document.getElementById('db-search').value.toLowerCase();
