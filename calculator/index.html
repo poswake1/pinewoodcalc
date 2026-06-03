@@ -5,34 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reactor Monitor | PBCC Tools</title>
     <style>
-        /* Reset and Base Layout */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            background: #0f0f1b; 
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); 
             color: #fff; 
             min-height: 100vh; 
-            display: flex; 
+            margin: 0;
+            display: flex;
             flex-direction: column;
         }
 
-        /* Fixed Header Styling */
-        header {
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
+        /* Header */
+        header { 
+            width: 100%; 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
             align-items: center;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
-            border-bottom: 1px solid #333;
+            background: rgba(0,0,0,0.2); 
         }
         .logo { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         .nav-links { display: flex; gap: 20px; list-style: none; }
         .nav-links a { color: #aaa; text-decoration: none; font-size: 0.8rem; text-transform: uppercase; }
         .nav-links a:hover { color: #fff; }
 
-        /* Main Content Container */
+        /* Main Content */
         .content-wrapper {
             flex-grow: 1;
             display: flex;
@@ -41,8 +39,15 @@
             padding: 20px;
         }
 
-        /* Calculator Card */
-        .card { background: #1a1a2e; padding: 25px; border-radius: 16px; width: 100%; max-width: 450px; border: 1px solid #333; }
+        .card { 
+            background: rgba(255, 255, 255, 0.05); 
+            padding: 25px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 450px; 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
         h1 { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
         .temp-display { font-size: 2rem; text-align: center; margin: 20px 0; font-family: monospace; color: #00ff66; border: 1px solid #222; padding: 10px; border-radius: 8px; }
         .section { margin-bottom: 20px; }
@@ -58,8 +63,10 @@
     <header>
         <div class="logo">PBCC Tools</div>
         <ul class="nav-links">
-            <li><a href="/pinewoodcalc/">Conversion Tool</a></li>
-            <li><a href="/pinewoodcalc/weapons">Weapons Database</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/conversion/">Converter</a></li>
+            <li><a href="/calculator/">Reactor</a></li>
+            <li><a href="/weapons/">Weapons</a></li>
         </ul>
     </header>
 
