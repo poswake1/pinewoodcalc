@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reactor Monitor | PBCC Tools</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #0f0f1b; color: #fff; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
         .card { background: #1a1a2e; padding: 25px; border-radius: 16px; width: 100%; max-width: 450px; border: 1px solid #333; }
-        h1 { text-align: center; margin-bottom: 20px; }
-        .temp-display { font-size: 2rem; text-align: center; margin: 20px 0; font-family: monospace; color: #00ff66; }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
+        .temp-display { font-size: 2rem; text-align: center; margin: 20px 0; font-family: monospace; color: #00ff66; border: 1px solid #222; padding: 10px; border-radius: 8px; }
         .section { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #aaa; text-transform: uppercase; font-size: 0.8rem; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #aaa; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; }
         .btn-group { display: flex; gap: 5px; flex-wrap: wrap; }
-        button { flex: 1; padding: 10px; border-radius: 6px; border: none; background: #333; color: #fff; cursor: pointer; transition: 0.2s; }
+        button { flex: 1; padding: 10px; border-radius: 6px; border: none; background: #333; color: #fff; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
         button:hover { background: #444; }
-        button.active { background: #007bff; }
+        button.active { background: #007bff; color: white; }
     </style>
 </head>
 <body>
@@ -76,8 +77,10 @@
     }
 
     function updateUI() {
-        // Reset and Highlight active buttons
+        // Clear active class
         document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        
+        // Set new active class
         document.getElementById('p' + state.power).classList.add('active');
         document.getElementById('l' + state.lasers).classList.add('active');
         document.getElementById('f' + state.fans).classList.add('active');
@@ -85,14 +88,19 @@
     }
 
     function calculate() {
-        // Power: Level 1=+2, 2=+6, 3=+10, 4=+14 (Level*4 - 2)
+        // Scaling: Power 1=+2, 2=+6, 3=+10, 4=+14 (Level*4 - 2)
         let powerVal = (state.power * 4) - 2;
-        // Lasers: 1 laser = +2 (6 lasers = +12)
+        
+        // Lasers: +2 per laser (6 lasers = +12)
         let laserVal = state.lasers * 2;
+        
+        // Fans: -2 per fan (5 fans = -10)
+        let fanVal = state.fans * 2;
+        
         // Coolant: -14
         let coolantVal = state.coolant ? 14 : 0;
         
-        let result = powerVal + laserVal - coolantVal;
+        let result = powerVal + laserVal - fanVal - coolantVal;
         
         document.getElementById('result').innerText = result + "°C / 8s";
     }
