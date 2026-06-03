@@ -4,66 +4,102 @@
     <meta charset="UTF-8">
     <title>Reactor Monitor | PBCC Tools</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f0f1b; color: #fff; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 16px; width: 100%; max-width: 500px; }
-        .progress-container { width: 100%; height: 30px; background: #222; border-radius: 15px; margin: 20px 0; overflow: hidden; border: 1px solid #444; position: relative; }
-        #temp-bar { width: 50%; height: 100%; background: linear-gradient(90deg, #3498db, #2ecc71, #e74c3c); transition: width 0.5s ease; position: absolute; left: 0; }
-        .control-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; }
-        input[type="number"] { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #444; background: #222; color: white; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f1b; color: #fff; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
+        .card { background: #1a1a2e; padding: 25px; border-radius: 16px; width: 100%; max-width: 450px; border: 1px solid #333; }
+        h1 { text-align: center; margin-bottom: 20px; }
+        .temp-display { font-size: 2rem; text-align: center; margin: 20px 0; font-family: monospace; color: #00ff66; }
+        .section { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #aaa; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-group { display: flex; gap: 5px; flex-wrap: wrap; }
+        button { flex: 1; padding: 10px; border-radius: 6px; border: none; background: #333; color: #fff; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #444; }
+        button.active { background: #007bff; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Reactor Monitor</h1>
-        <div class="progress-container"><div id="temp-bar"></div></div>
-        <h2 id="temp-display">0°C / 8s</h2>
+<div class="card">
+    <h1>Reactor Monitor</h1>
+    <div class="temp-display" id="result">0°C / 8s</div>
 
-        <div class="control-group">
-            <label>Reactor Level (1-4)</label>
-            <input type="number" id="power" value="1" min="1" max="4" oninput="calculate()">
-        </div>
-        <div class="control-group">
-            <label>Coolant (0 or 14)</label>
-            <input type="number" id="coolant" value="0" step="14" oninput="calculate()">
-        </div>
-        <div class="control-group">
-            <label>Lasers (Number On)</label>
-            <input type="number" id="lasers" value="0" oninput="calculate()">
-        </div>
-        <div class="control-group">
-            <label>Fans (Number On)</label>
-            <input type="number" id="fans" value="0" oninput="calculate()">
+    <div class="section">
+        <label>Reactor Power (Max 4)</label>
+        <div class="btn-group" id="power-btns">
+            <button onclick="set('power', 1)" id="p1">1</button>
+            <button onclick="set('power', 2)" id="p2">2</button>
+            <button onclick="set('power', 3)" id="p3">3</button>
+            <button onclick="set('power', 4)" id="p4">4</button>
         </div>
     </div>
 
-    <script>
-        function calculate() {
-            // Extracted values based on your simulation
-            let power = parseInt(document.getElementById('power').value) || 1;
-            let coolant = parseInt(document.getElementById('coolant').value) || 0;
-            let lasers = parseInt(document.getElementById('lasers').value) || 0;
-            let fans = parseInt(document.getElementById('fans').value) || 0;
+    <div class="section">
+        <label>Lasers (Max 6)</label>
+        <div class="btn-group" id="laser-btns">
+            <button onclick="set('lasers', 0)" id="l0">0</button>
+            <button onclick="set('lasers', 1)" id="l1">1</button>
+            <button onclick="set('lasers', 2)" id="l2">2</button>
+            <button onclick="set('lasers', 3)" id="l3">3</button>
+            <button onclick="set('lasers', 4)" id="l4">4</button>
+            <button onclick="set('lasers', 5)" id="l5">5</button>
+            <button onclick="set('lasers', 6)" id="l6">6</button>
+        </div>
+    </div>
 
-            // Logic:
-            // Reactor Power Level 1 = +2, Level 4 = +14 (Scaling seems to be +4 per level)
-            let powerImpact = (power * 4) - 2; 
-            let laserImpact = lasers * 2; // Assuming 6 lasers = 12, so 2 per laser
-            let fanImpact = fans * 0; // Update this if you have the data for fan cooling
-            
-            let result = powerImpact + laserImpact - coolant - fanImpact;
+    <div class="section">
+        <label>Fans (Max 5)</label>
+        <div class="btn-group" id="fan-btns">
+            <button onclick="set('fans', 0)" id="f0">0</button>
+            <button onclick="set('fans', 1)" id="f1">1</button>
+            <button onclick="set('fans', 2)" id="f2">2</button>
+            <button onclick="set('fans', 3)" id="f3">3</button>
+            <button onclick="set('fans', 4)" id="f4">4</button>
+            <button onclick="set('fans', 5)" id="f5">5</button>
+        </div>
+    </div>
 
-            // Temperature capping
-            let temp = 0; // This is a tracker for current temp, currently simulated per 8s
-            
-            document.getElementById('temp-display').innerText = result + "°C / 8s";
-            
-            // Bar visual (Relative scale)
-            let percentage = Math.min(Math.max(((result + 20) / 40) * 100, 0), 100);
-            document.getElementById('temp-bar').style.width = percentage + '%';
-        }
+    <div class="section">
+        <label>Coolant</label>
+        <div class="btn-group">
+            <button onclick="set('coolant', false)" id="c-off">OFF</button>
+            <button onclick="set('coolant', true)" id="c-on">ON</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let state = { power: 1, lasers: 0, fans: 0, coolant: false };
+
+    function set(key, val) {
+        state[key] = val;
+        updateUI();
         calculate();
-    </script>
+    }
+
+    function updateUI() {
+        // Reset and Highlight active buttons
+        document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        document.getElementById('p' + state.power).classList.add('active');
+        document.getElementById('l' + state.lasers).classList.add('active');
+        document.getElementById('f' + state.fans).classList.add('active');
+        document.getElementById('c-' + (state.coolant ? 'on' : 'off')).classList.add('active');
+    }
+
+    function calculate() {
+        // Power: Level 1=+2, 2=+6, 3=+10, 4=+14 (Level*4 - 2)
+        let powerVal = (state.power * 4) - 2;
+        // Lasers: 1 laser = +2 (6 lasers = +12)
+        let laserVal = state.lasers * 2;
+        // Coolant: -14
+        let coolantVal = state.coolant ? 14 : 0;
+        
+        let result = powerVal + laserVal - coolantVal;
+        
+        document.getElementById('result').innerText = result + "°C / 8s";
+    }
+
+    // Initialize
+    updateUI();
+    calculate();
+</script>
 </body>
 </html>
