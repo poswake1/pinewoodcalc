@@ -3,151 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reactor Monitor | PBCC Tools</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); 
-            color: #fff; 
-            min-height: 100vh; 
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header */
-        header { 
-            width: 100%; 
-            padding: 20px 40px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            background: rgba(0,0,0,0.2); 
-        }
-        .logo { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-links { display: flex; gap: 20px; list-style: none; }
-        .nav-links a { color: #aaa; text-decoration: none; font-size: 0.8rem; text-transform: uppercase; }
-        .nav-links a:hover { color: #fff; }
-
-        /* Main Content */
-        .content-wrapper {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .card { 
-            background: rgba(255, 255, 255, 0.05); 
-            padding: 25px; 
-            border-radius: 16px; 
-            width: 100%; 
-            max-width: 450px; 
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        h1 { text-align: center; margin-bottom: 20px; font-size: 1.5rem; }
-        .temp-display { font-size: 2rem; text-align: center; margin: 20px 0; font-family: monospace; color: #00ff66; border: 1px solid #222; padding: 10px; border-radius: 8px; }
-        .section { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #aaa; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; }
-        .btn-group { display: flex; gap: 5px; flex-wrap: wrap; }
-        button { flex: 1; padding: 10px; border-radius: 6px; border: none; background: #333; color: #fff; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
-        button:hover { background: #444; }
-        button.active { background: #007bff; color: white; }
-    </style>
+    <title>Core Simulation</title>
 </head>
 <body>
-    
     <header>
         <div class="logo">PBCC Tools</div>
         <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/conversion/">Converter</a></li>
-            <li><a href="/calculator/">Reactor</a></li>
-            <li><a href="/weapons/">Weapons</a></li>
+            <li><a href="../conversion/index.html">Conversion</a></li>
+            <li><a href="../weapons/index.html">Weapons Database</a></li>
         </ul>
     </header>
-
-    <div class="content-wrapper">
-        <div class="card">
-            <h1>Reactor Monitor</h1>
-            <div class="temp-display" id="result">0°C / 8s</div>
-
-            <div class="section">
-                <label>Reactor Power (Max 4)</label>
-                <div class="btn-group" id="power-btns">
-                    <button onclick="set('power', 1)" id="p1">1</button>
-                    <button onclick="set('power', 2)" id="p2">2</button>
-                    <button onclick="set('power', 3)" id="p3">3</button>
-                    <button onclick="set('power', 4)" id="p4">4</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <label>Lasers (Max 6)</label>
-                <div class="btn-group" id="laser-btns">
-                    <button onclick="set('lasers', 0)" id="l0">0</button>
-                    <button onclick="set('lasers', 1)" id="l1">1</button>
-                    <button onclick="set('lasers', 2)" id="l2">2</button>
-                    <button onclick="set('lasers', 3)" id="l3">3</button>
-                    <button onclick="set('lasers', 4)" id="l4">4</button>
-                    <button onclick="set('lasers', 5)" id="l5">5</button>
-                    <button onclick="set('lasers', 6)" id="l6">6</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <label>Fans (Max 5)</label>
-                <div class="btn-group" id="fan-btns">
-                    <button onclick="set('fans', 0)" id="f0">0</button>
-                    <button onclick="set('fans', 1)" id="f1">1</button>
-                    <button onclick="set('fans', 2)" id="f2">2</button>
-                    <button onclick="set('fans', 3)" id="f3">3</button>
-                    <button onclick="set('fans', 4)" id="f4">4</button>
-                    <button onclick="set('fans', 5)" id="f5">5</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <label>Coolant</label>
-                <div class="btn-group">
-                    <button onclick="set('coolant', false)" id="c-off">OFF</button>
-                    <button onclick="set('coolant', true)" id="c-on">ON</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<script>
-    let state = { power: 1, lasers: 0, fans: 0, coolant: false };
-
-    function set(key, val) {
-        state[key] = val;
-        updateUI();
-        calculate();
-    }
-
-    function updateUI() {
-        document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-        document.getElementById('p' + state.power).classList.add('active');
-        document.getElementById('l' + state.lasers).classList.add('active');
-        document.getElementById('f' + state.fans).classList.add('active');
-        document.getElementById('c-' + (state.coolant ? 'on' : 'off')).classList.add('active');
-    }
-
-    function calculate() {
-        let powerVal = (state.power * 4) - 2;
-        let laserVal = state.lasers * 2;
-        let fanVal = state.fans * 2;
-        let coolantVal = state.coolant ? 14 : 0;
-        let result = powerVal + laserVal - fanVal - coolantVal;
-        document.getElementById('result').innerText = result + "°C / 8s";
-    }
-
-    updateUI();
-    calculate();
-</script>
+    <main>
+        <h1>Core Simulation Tool</h1>
+    </main>
 </body>
 </html>
